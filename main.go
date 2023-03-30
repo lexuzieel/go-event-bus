@@ -24,7 +24,7 @@ type EmitEventChain struct {
 	message *message.Message
 }
 
-func Event(name string) *EmitEventChain {
+func New(name string) *EmitEventChain {
 	return &EmitEventChain{
 		event:   name,
 		message: message.NewMessage(watermill.NewShortUUID(), nil),

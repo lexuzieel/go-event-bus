@@ -4,13 +4,13 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestEventEmitAndListen(t *testing.T) {
-	eventName := "sample-event"
+	event := "sample-event"
 
-	channel, err := Listen(eventName)
+	channel, err := Listen(event)
 	if err != nil {
 		t.Error(err)
 	}
@@ -20,13 +20,13 @@ func TestEventEmitAndListen(t *testing.T) {
 
 	go func() {
 		message := WaitFor(channel)
-		assert.Equal(t, message.Metadata["field"], "metadata")
-		assert.Equal(t, string(message.Payload), "hello")
+		require.Equal(t, message.Metadata["value"], "metadata")
+		require.Equal(t, string(message.Payload), "hello")
 		wg.Done()
 	}()
 
-	err = Event(eventName).
-		With("field", "metadata").
+	err = New(event).
+		With("value", "metadata").
 		Payload([]byte("hello")).
 		Emit()
 	if err != nil {
